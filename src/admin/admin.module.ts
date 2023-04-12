@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AdminController } from './admin.controller';
 import { GoogleAdminStrategy } from './strategy/google.admin.strategy';
 import { AdminService } from './admin.service';
+import { AdminRepository } from './admin.respository';
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { AdminService } from './admin.service';
     PassportModule.register({ defaultStrategy: 'googleAdmin' }),
   ],
   controllers: [AdminController],
-  providers: [AdminService, GoogleAdminStrategy],
+  providers: [AdminService, GoogleAdminStrategy, AdminRepository],
 })
 export class AdminModule {}

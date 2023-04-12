@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { AdminRepository } from './admin.respository';
+import { Admin } from './schema/admin.schema';
 
 @Injectable()
 export class AdminService {
-  googleLogin(req) {
-    if (!req.user) {
-      return 'No user from google'
-    }
+  constructor(private readonly _adminRepository: AdminRepository) {}
 
-    return {
-      message: 'User information from google en Admin',
-      user: req.user
-    }
+  // GOOGLE AUTH
+  async validateUser(details: any): Promise<Admin> {
+    return this._adminRepository.validateUser(details);
+  }
+
+  async findById(id: string): Promise<Admin> {
+    const user = await this._adminRepository.findById(id);
+    return user;
   }
 }
