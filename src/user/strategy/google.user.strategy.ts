@@ -1,13 +1,15 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-google-oauth20';
+import { Strategy, Profile } from 'passport-google-oauth20';
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user.service';
 import { User } from '../schema/user.schema';
+
 
 @Injectable()
 export class GoogleUserStrategy extends PassportStrategy(
   Strategy,
   'googleUser',
+  
 ) {
   constructor(private readonly userService: UserService) {
     super({
@@ -17,6 +19,7 @@ export class GoogleUserStrategy extends PassportStrategy(
       scope: ['profile', 'email'],
       prompt: 'select_account consent',
     });
+    
   }
 
   authorizationParams(options: any): object {
@@ -28,7 +31,7 @@ export class GoogleUserStrategy extends PassportStrategy(
   async validate(
     accessToken: string,
     refreshToken: string,
-    profile: any,
+    profile: Profile,
   ): Promise<User> {
     const user = await this.userService.validateUser({
       email: profile.emails[0].value,
@@ -39,4 +42,6 @@ export class GoogleUserStrategy extends PassportStrategy(
     });
     return user || null;
   }
+
+ 
 }

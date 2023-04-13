@@ -20,12 +20,11 @@ export class BaseRepository<T> {
   async validateUser(details: any): Promise<T> {
     try {
       const { email, fullName, subject, provider, picture } = details;
-
+      
       const user = await this.BaseModel.findOne({
         provider,
         subject,
-        // si va a tener multiples cuentas con diferentes roles:
-        // role: this.modelName.toString().toLowerCase(),
+        // si solo se quiere tener una cuenta quitar subject y agregar email
       });
       if (!user) {
         console.log('user not Found, creating...');

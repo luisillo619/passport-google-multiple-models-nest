@@ -1,17 +1,17 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AuthGuard } from '@nestjs/passport';
+import { GoogleUserGuard } from './utils/guardian.user.google.auth';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @UseGuards(AuthGuard('googleUser'))
+  @UseGuards(GoogleUserGuard)
   async googleAuth(@Req() req) {}
 
   @Get('redirect')
-  @UseGuards(AuthGuard('googleUser'))
+  @UseGuards(GoogleUserGuard)
   redirect(@Req() request, @Res() response: any) {
     const userAgent = request.headers['user-agent'];
 
@@ -21,12 +21,7 @@ export class UserController {
       }
       return 'Not Authenticated';
     }
-    return response.redirect(`${process.env.API_URL}/user/status`);
+    return response.redirect(`${process.env.API_URL}/api/auth/google/status`);
   }
 
-  @Get('status')
-  status(@Req() request: Request & { user: any }) {
-    if (request.user) return 'Authenticated';
-    return 'Not Authenticated';
-  }
 }
