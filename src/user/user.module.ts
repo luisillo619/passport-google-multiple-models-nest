@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { GoogleUserStrategy } from './strategy/google.user.strategy';
+import { UserRepository } from './user.repository';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { GoogleUserStrategy } from './strategy/google.user.strategy';
   ],
 
   controllers: [UserController],
-  providers: [UserService, GoogleUserStrategy],
+  providers: [UserService, GoogleUserStrategy, UserRepository],
 })
 export class UserModule {}
