@@ -1,17 +1,17 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { AuthGuard } from '@nestjs/passport';
+import { GoogleAdminGuard } from './utils/guardian.admin.google.auth';
 
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Get()
-  @UseGuards(AuthGuard('googleAdmin'))
+  @UseGuards(GoogleAdminGuard)
   async googleAuth(@Req() req) {}
 
   @Get('redirect')
-  @UseGuards(AuthGuard('googleAdmin'))
+  @UseGuards(GoogleAdminGuard)
   redirect(@Req() request, @Res() response: any) {
     const userAgent = request.headers['user-agent'];
 
@@ -21,12 +21,8 @@ export class AdminController {
       }
       return 'Not Authenticated';
     }
-    return response.redirect(`${process.env.API_URL}/admin/status`);
+    return response.redirect(`${process.env.API_URL}/api/auth/google/status`);
+
   }
 
-  @Get('status')
-  status(@Req() request: Request & { user: any }) {
-    if (request.user) return 'Authenticated';
-    return 'Not Authenticated';
-  }
 }
